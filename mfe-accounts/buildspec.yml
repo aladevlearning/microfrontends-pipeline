@@ -16,3 +16,8 @@ phases:
     commands:
       - echo Build started...
       - ng build
+artifacts:
+  files:
+    - "**/*"
+  discard-paths: no
+  base-directory: dist/mfe-accounts
