@@ -5,7 +5,7 @@ phases:
       nodejs: 14
     commands:
       - echo Installing source NPM dependencies...
-      - echo $CODEBUILD_INITIATOR
+      - echo $(echo ${CODEBUILD_INITIATOR} | cut -d'/' -f2 | cut -d'_' -f3)
       - cd mfe-accounts
       - npm install -y npm@latest
       - npm install -g @angular/cli
