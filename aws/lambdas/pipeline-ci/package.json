@@ -1,0 +1,9 @@
+{
+  "name": "ciPipeline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-codepipeline": "3.28.0"
+  }
+}
