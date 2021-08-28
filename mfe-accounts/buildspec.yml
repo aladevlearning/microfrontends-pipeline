@@ -20,3 +20,5 @@ artifacts:
   files:
     - "**/*"
   discard-paths: no
+  base-directory: dist
+  name: mfe-accounts-dist
