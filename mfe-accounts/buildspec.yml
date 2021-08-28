@@ -5,8 +5,17 @@ phases:
       nodejs: 14
     commands:
       - echo Installing source NPM dependencies...
-      - npm i
-      - npm i -g @angular/cli
+      - npm install -y npm@latest
+      - npm install -g @angular/cli
+      - rm package-lock.json
+    pre_build:
+      commands:
+        - npm install
   build:
     commands:
+      - echo Build started...
       - ng build
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist/mfe-accounts
