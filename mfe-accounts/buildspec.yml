@@ -10,9 +10,9 @@ phases:
       - rm package-lock.json
     pre_build:
       commands:
-        - cd mfe-accounts
         - npm install
   build:
     commands:
       - echo Build started...
+      - cd mfe-accounts
       - ng build
