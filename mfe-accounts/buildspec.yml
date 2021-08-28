@@ -5,6 +5,7 @@ phases:
       nodejs: 14
     commands:
       - echo Installing source NPM dependencies...
+      - cd mfe-accounts
       - npm install -y npm@latest
       - npm install -g @angular/cli
       - rm package-lock.json
@@ -14,5 +15,4 @@ phases:
   build:
     commands:
       - echo Build started...
-      - cd mfe-accounts
       - ng build
