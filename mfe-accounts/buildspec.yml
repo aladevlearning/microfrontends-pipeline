@@ -5,6 +5,7 @@ phases:
       nodejs: 14
     commands:
       - echo Installing source NPM dependencies...
+      - echo $CODEBUILD_INITIATOR
       - cd mfe-accounts
       - npm install -y npm@latest
       - npm install -g @angular/cli
@@ -21,4 +22,3 @@ artifacts:
     - "**/*"
   discard-paths: yes
   base-directory: mfe-accounts/dist
-  name: mfe-accounts-dist
