@@ -10,7 +10,7 @@ phases:
       nodejs: 14
     commands:
       - echo Installing source NPM dependencies...
-      - echo $CURRENT_MFE
+      - echo ${CURRENT_MFE}
       - cd mfe-accounts
       - npm install -y npm@latest
       - npm install -g @angular/cli
