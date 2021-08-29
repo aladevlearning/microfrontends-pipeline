@@ -7,11 +7,6 @@ const client = new CodePipelineClient({
 });
 
 exports.handler = async (event) => {
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify('Hello from Lambda!'),
-    };
-
     const modifiedFolder = findFolder( event["commits"][0]);
 
     if (!modifiedFolder) {
@@ -21,7 +16,7 @@ exports.handler = async (event) => {
         };
     }
 
-    const pipelineName = modifiedFolder + "-pipeline";
+    const pipelineName = modifiedFolder;
 
     console.log("Modified folder: ", modifiedFolder);
     console.log("Pipeline to be triggered: ", pipelineName);
