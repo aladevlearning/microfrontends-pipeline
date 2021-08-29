@@ -1,0 +1,29 @@
+version: 0.2
+
+env:
+  variables:
+    CURRENT_MFE: $(echo ${CODEBUILD_INITIATOR} | cut -d'/' -f2)
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - echo Installing source NPM dependencies...
+      - echo ${CURRENT_MFE}
+      - cd $(echo ${CODEBUILD_INITIATOR} | cut -d'/' -f2)
+      - npm install -y npm@latest
+      - npm install -g @angular/cli
+      - rm package-lock.json
+    pre_build:
+      commands:
+        - npm install
+  build:
+    commands:
+      - echo Build started...
+      - ng build
+artifacts:
+  files:
+    - "**/*"
+  discard-paths: yes
+  base-directory: $(echo ${CODEBUILD_INITIATOR} | cut -d'/' -f2)/dist
