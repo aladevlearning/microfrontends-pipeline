@@ -26,4 +26,4 @@ artifacts:
   files:
     - "**/*"
   discard-paths: yes
-  base-directory: dist
+  base-directory: $(echo ${CODEBUILD_INITIATOR} | cut -d'/' -f2)/dist
