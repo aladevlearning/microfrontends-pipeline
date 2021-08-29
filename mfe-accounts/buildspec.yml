@@ -1,11 +1,16 @@
 version: 0.2
+
+env:
+  variables:
+    CURRENT_MFE: $(echo ${CODEBUILD_INITIATOR} | cut -d'/' -f2)
+
 phases:
   install:
     runtime-versions:
       nodejs: 14
     commands:
       - echo Installing source NPM dependencies...
-      - echo $(echo ${CODEBUILD_INITIATOR} | cut -d'/' -f2)
+      - echo $CURRENT_MFE
       - cd mfe-accounts
       - npm install -y npm@latest
       - npm install -g @angular/cli
