@@ -11,7 +11,7 @@ phases:
     commands:
       - echo Installing source NPM dependencies...
       - echo ${CURRENT_MFE}
-      - cd mfe-accounts
+      - cd $(echo ${CODEBUILD_INITIATOR} | cut -d'/' -f2)
       - npm install -y npm@latest
       - npm install -g @angular/cli
       - rm package-lock.json
