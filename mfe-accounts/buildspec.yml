@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    CURRENT_MFE: ${CODEBUILD_INITIATOR} | cut -d'/' -f2
+    CURRENT_MFE: $(echo ${CODEBUILD_INITIATOR} | cut -d'/' -f2)
 
 phases:
   install:
