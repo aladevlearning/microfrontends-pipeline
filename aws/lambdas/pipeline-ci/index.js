@@ -7,85 +7,59 @@ const client = new CodePipelineClient({
 });
 
 exports.handler = async (event) => {
-    const modifiedFolder = findFolder( event["commits"][0]);
+    const microFrontendNames = findMicroFrontendNames( event["commits"][0]);
 
-    if (!modifiedFolder) {
+    if (!microFrontendNames || !microFrontendNames.length) {
         return {
             statusCode: 404,
             body: JSON.stringify('Folder cannot be found'),
         };
     }
 
-    const pipelineName = modifiedFolder;
+    const codePipelinePromises = [];
 
-    console.log("Modified folder: ", modifiedFolder);
-    console.log("Pipeline to be triggered: ", pipelineName);
+    microFrontendNames.forEach(microFrontendName => {
+        const params = {
+          name: microFrontendName
+        };
 
-    var params = {
-      name: pipelineName
-    };
+        const command = new StartPipelineExecutionCommand(params);
 
-    const command = new StartPipelineExecutionCommand(params);
+        codePipelinePromises.push(client.send(command));
+    });
 
-    try {
-      const data = await client.send(command);
-      // process data.
-      console.log("Code pipeline triggered: ", data);
+    const result = await Promise.allSettled(codePipelinePromises);
 
-      return {
-             statusCode: 200,
-             body: JSON.stringify('Code pipeline triggered: ' + pipelineName),
-      };
-    } catch (error) {
-      // error handling.
-      console.log(error);
-    } finally {
-      // finally.
-    }
-
+    console.log("Response was: ", result);
     return {
-       statusCode: 500,
-       body: JSON.stringify('Error during lambda'),
+         statusCode: 200,
+         body: JSON.stringify('Code pipeline triggered: ' + result),
     };
+
 };
 
-function findFolder(latestCommit) {
-    const modifiedFiles = findFolderBasedOnCommitType(latestCommit, "modified");
+function findMicroFrontendNames(latestCommit) {
 
-    if (modifiedFiles) {
-        console.log("Found a modified file!");
-        return modifiedFiles;
-    }
+    console.log("Try",  latestCommit["modified"]
+        .concat(latestCommit["added"])
+        .concat(latestCommit["removed"]));
 
-    const addedFiles = findFolderBasedOnCommitType(latestCommit, "added");
-    if (addedFiles) {
-        console.log("Found an added file!");
-        return addedFiles;
-    }
-
-    const deletedFiles = findFolderBasedOnCommitType(latestCommit, "deleted");
-    if (deletedFiles) {
-        console.log("Found a deleted file!");
-        return deletedFiles;
-    }
-
-    return null;
-}
-
-function findFolderBasedOnCommitType(latestCommit, commitType) {
-    const files = latestCommit[commitType];
-    console.log("files", files);
-    if (files) {
-        const normalizedFolderName = files.map(j => {
-            if (j[commitType]) {
-                return j[commitType][0].split("/")[0];
+    const mfeNames = latestCommit["modified"]
+        .concat(latestCommit["added"])
+        .concat(latestCommit["removed"])
+        .map(filePath => {
+            if (filePath["modified"]) {
+                return filePath["modified"][0].split("/")[0];
+            }
+            if (filePath["added"]) {
+                return filePath["added"][0].split("/")[0];
+            }
+            if (filePath["removed"]) {
+                return filePath["removed"][0].split("/")[0];
             }
 
-            return j.split("/")[0];
+            return filePath.split("/")[0];
         });
 
-        return normalizedFolderName.length ? normalizedFolderName[0] : null;
-    }
-
-    return null;
+    return [...new Set(mfeNames)];
 }
