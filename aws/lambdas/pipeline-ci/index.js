@@ -39,7 +39,6 @@ exports.handler = async (event) => {
 };
 
 function findMicroFrontendNames(latestCommit) {
-
     console.log("Try",  latestCommit["modified"]
         .concat(latestCommit["added"])
         .concat(latestCommit["removed"]));
