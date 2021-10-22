@@ -1,9 +1,5 @@
 version: 0.2
 
-env:
-  variables:
-    CURRENT_MFE: $(echo ${CODEBUILD_INITIATOR} | sed 's/-dev//g' | cut -d'/' -f2)
-
 phases:
   install:
     runtime-versions:
@@ -11,7 +7,7 @@ phases:
     commands:
       - echo Installing source NPM dependencies...
       - echo ${CURRENT_MFE}
-      - cd $(echo ${CODEBUILD_INITIATOR} | cut -d'/' -f2)
+      - cd $(echo ${CODEBUILD_INITIATOR} | sed 's/-dev//g' | cut -d'/' -f2)
       - npm install -y npm@latest
       - npm install -g @angular/cli
       - rm package-lock.json
